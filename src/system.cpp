@@ -25,11 +25,13 @@ vector<Process>& System::Processes() {
     extant_pids.insert(process.Pid());
   }
 
+  processes_.clear();
   for (int pid : pids) {
     if (extant_pids.find(pid) == extant_pids.end()) {
       processes_.emplace_back(pid);
     }
   }
+  std::sort(processes_.begin(), processes_.end());
   return processes_;
 }
 

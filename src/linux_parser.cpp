@@ -277,10 +277,16 @@ float LinuxParser::Utilization(int pid) {
       }
     }
   }
-  float total_time, seconds, Hertz, cpu_usage;
+  // float total_time, seconds, Hertz, cpu_usage;
+  // Hertz = sysconf(_SC_CLK_TCK);
+  // total_time = std::stof(utime) + std::stof(stime) + std::stof(cstime) + std::stof(cutime);
+  // seconds = std::stof(uptime) - (std::stof(starttime) / Hertz);
+  // cpu_usage = 100.0 * ((total_time / Hertz) / seconds);
+  // return cpu_usage;
+  long total_time, seconds, Hertz;
   Hertz = sysconf(_SC_CLK_TCK);
-  total_time = std::stof(utime) + std::stof(stime) + std::stof(cstime) + std::stof(cutime);
-  seconds = std::stof(uptime) - (std::stof(starttime) / Hertz);
-  cpu_usage = 100.0 * ((total_time / Hertz) / seconds);
+  total_time = std::stol(utime) + std::stol(stime) + std::stol(cstime) + std::stol(cutime);
+  seconds = total_time / Hertz;
+  float cpu_usage = float(total_time) / float(UpTime(pid));
   return cpu_usage;
 }
